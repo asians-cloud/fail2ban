@@ -103,6 +103,8 @@ class Filter(JailThread):
 		## Error counter (protected, so can be used in filter implementations)
 		## if it reached 100 (at once), run-cycle will go idle
 		self._errors = 0
+		## Seek to file end next time. When log is increasing fast, it is better to seek to the send and read the latest logs
+		self._nextSeekToEnd = False
 		## return raw host (host is not dns):
 		self.returnRawHost = False
 		## check each regex (used for test purposes):
@@ -657,6 +659,7 @@ class Filter(JailThread):
 					# simulate now as date:
 					date = MyTime.time()
 					self.__lastDate = date
+					self._nextSeekToEnd = True
 			else:
 				# in initialization (restore) phase, if too old - ignore:
 				if date is not None and date < MyTime.time() - self.getFindTime():
@@ -666,6 +669,7 @@ class Filter(JailThread):
 							date, MyTime.time(), self.getFindTime()),
 						("Please check jail has possibly a timezone issue. Line with odd timestamp: %s", 
 							line))
+					self._nextSeekToEnd = True
 					# ignore - too old (obsolete) entry:
 					return []
 
@@ -1121,6 +1125,9 @@ class FileFilter(Filter):
 					# acquire in operation from log and process:
 					self.inOperation = inOperation if inOperation is not None else log.inOperation
 					self.processLineAndAdd(line.rstrip('\r\n'))
+					if self._nextSeekToEnd:
+						log.seek(0, 2)
+						self._nextSeekToEnd = False
 		finally:
 			log.close()
 		db = self.jail.database
