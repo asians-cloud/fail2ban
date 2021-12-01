@@ -5,6 +5,8 @@
 
 Fail2Ban: Changelog
 ===================
+ver. 0.11.3 (2020/11/23) - seek to the file end whenlog is overload
+-----------
 
 ver. 0.11.2 (2020/11/23) - heal-the-world-with-security-tools
 -----------
