@@ -356,7 +356,7 @@ after = 1.conf
 					ret += i
 					# merge defaults and all sections to self:
 					alld.update(cfg.get_defaults())
-					for n, s in cfg.get_sections().iteritems():
+					for n, s in cfg.get_sections().items():
 						# conditional sections
 						cond = SafeConfigParserWithIncludes.CONDITIONAL_RE.match(n)
 						if cond:
@@ -373,7 +373,7 @@ after = 1.conf
 						if isinstance(s2, dict):
 							# save previous known values, for possible using in local interpolations later:
 							self.merge_section('KNOWN/'+n, 
-								dict(filter(lambda i: i[0] in s, s2.iteritems())), '')
+								dict(filter(lambda i: i[0] in s, s2.items())), '')
 							# merge section
 							s2.update(s)
 						else:
@@ -400,7 +400,7 @@ after = 1.conf
 			sec.update(options)
 			return
 		sk = {}
-		for k, v in options.iteritems():
+		for k, v in options.items():
 			if not k.startswith(pref) and k != '__name__':
 				sk[pref+k] = v
 		sec.update(sk)

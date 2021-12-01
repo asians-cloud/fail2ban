@@ -159,11 +159,11 @@ class Actions(JailThread, Mapping):
 		else:
 			if hasattr(self, '_reload_actions'):
 				# reload actions after all parameters set via stream:
-				for name, initOpts in self._reload_actions.iteritems():
+				for name, initOpts in self._reload_actions.items():
 					if name in self._actions:
 						self._actions[name].reload(**(initOpts if initOpts else {}))
 				# remove obsolete actions (untouched by reload process):
-				delacts = OrderedDict((name, action) for name, action in self._actions.iteritems()
+				delacts = OrderedDict((name, action) for name, action in self._actions.items()
 					if name not in self._reload_actions)
 				if len(delacts):
 					# unban all tickets using removed actions only:
@@ -333,7 +333,7 @@ class Actions(JailThread, Mapping):
 			True when the thread exits nicely.
 		"""
 		cnt = 0
-		for name, action in self._actions.iteritems():
+		for name, action in self._actions.items():
 			try:
 				action.start()
 			except Exception as e:
@@ -510,7 +510,7 @@ class Actions(JailThread, Mapping):
 					Observers.Main.add('banFound', bTicket, self._jail, btime)
 				logSys.notice("[%s] %sBan %s", self._jail.name, ('' if not bTicket.restored else 'Restore '), ip)
 				# do actions :
-				for name, action in self._actions.iteritems():
+				for name, action in self._actions.items():
 					try:
 						if bTicket.restored and getattr(action, 'norestored', False):
 							continue
@@ -553,7 +553,7 @@ class Actions(JailThread, Mapping):
 					# check epoch in order to reban it:
 					if bTicket.banEpoch < self.banEpoch:
 						if not rebanacts: rebanacts = dict(
-							(name, action) for name, action in self._actions.iteritems()
+							(name, action) for name, action in self._actions.items()
 								if action.banEpoch > bTicket.banEpoch)
 						cnt += self.__reBan(bTicket, actions=rebanacts)
 				else: # pragma: no cover - unexpected: ticket is not banned for some reasons - reban using all actions:
@@ -581,7 +581,7 @@ class Actions(JailThread, Mapping):
 		aInfo = self._getActionInfo(ticket)
 		if log:
 			logSys.notice("[%s] Reban %s%s", self._jail.name, aInfo["ip"], (', action %r' % actions.keys()[0] if len(actions) == 1 else ''))
-		for name, action in actions.iteritems():
+		for name, action in actions.items():
 			try:
 				logSys.debug("[%s] action %r: reban %s", self._jail.name, name, ip)
 				if not aInfo.immutable: aInfo.reset()
@@ -605,7 +605,7 @@ class Actions(JailThread, Mapping):
 		if not self.banManager._inBanList(ticket): return
 		# do actions :
 		aInfo = None
-		for name, action in self._actions.iteritems():
+		for name, action in self._actions.items():
 			try:
 				if ticket.restored and getattr(action, 'norestored', False):
 					continue
@@ -654,7 +654,7 @@ class Actions(JailThread, Mapping):
 		cnt = 0
 		# first we'll execute flush for actions supporting this operation:
 		unbactions = {}
-		for name, action in (actions if actions is not None else self._actions).iteritems():
+		for name, action in (actions if actions is not None else self._actions).items():
 			try:
 				if hasattr(action, 'flush') and (not isinstance(action, CommandAction) or action.actionflush):
 					logSys.notice("[%s] Flush ticket(s) with %s", self._jail.name, name)
@@ -709,7 +709,7 @@ class Actions(JailThread, Mapping):
 		aInfo = self._getActionInfo(ticket)
 		if log:
 			logSys.notice("[%s] Unban %s", self._jail.name, aInfo["ip"])
-		for name, action in unbactions.iteritems():
+		for name, action in unbactions.items():
 			try:
 				logSys.debug("[%s] action %r: unban %s", self._jail.name, name, ip)
 				if not aInfo.immutable: aInfo.reset()

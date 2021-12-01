@@ -55,13 +55,13 @@ class Ticket(object):
 		self._time = time if time is not None else MyTime.time()
 		self._data = {'matches': matches or [], 'failures': 0}
 		if data is not None:
-			for k,v in data.iteritems():
+			for k,v in data.items():
 				if v is not None:
 					self._data[k] = v
 		if ticket:
 			# ticket available - copy whole information from ticket:
 			self.update(ticket)
-			#self.__dict__.update(i for i in ticket.__dict__.iteritems() if i[0] in self.__dict__)
+			#self.__dict__.update(i for i in ticket.__dict__.items() if i[0] in self.__dict__)
 
 	def __str__(self):
 		return "%s: ip=%s time=%s bantime=%s bancount=%s #attempts=%d matches=%r" % \
@@ -180,8 +180,8 @@ class Ticket(object):
 		# if overwrite - set data and filter None values:
 		if len(args) == 1:
 			# todo: if support >= 2.7 only:
-			# self._data = {k:v for k,v in args[0].iteritems() if v is not None}
-			self._data = dict([(k,v) for k,v in args[0].iteritems() if v is not None])
+			# self._data = {k:v for k,v in args[0].items() if v is not None}
+			self._data = dict([(k,v) for k,v in args[0].items() if v is not None])
 		# add k,v list or dict (merge):
 		elif len(args) == 2:
 			self._data.update((args,))
@@ -191,8 +191,8 @@ class Ticket(object):
 			self._data.update(argv)
 		# filter (delete) None values:
 		# todo: if support >= 2.7 only:
-		# self._data = {k:v for k,v in self._data.iteritems() if v is not None}
-		self._data = dict([(k,v) for k,v in self._data.iteritems() if v is not None])
+		# self._data = {k:v for k,v in self._data.items() if v is not None}
+		self._data = dict([(k,v) for k,v in self._data.items() if v is not None])
 	
 	def getData(self, key=None, default=None):
 		# return whole data dict:
@@ -205,13 +205,13 @@ class Ticket(object):
 			# return filtered by lambda/function:
 			if callable(key):
 				# todo: if support >= 2.7 only:
-				# return {k:v for k,v in self._data.iteritems() if key(k)}
-				return dict([(k,v) for k,v in self._data.iteritems() if key(k)])
+				# return {k:v for k,v in self._data.items() if key(k)}
+				return dict([(k,v) for k,v in self._data.items() if key(k)])
 			# return filtered by keys:
 			if hasattr(key, '__iter__'):
 				# todo: if support >= 2.7 only:
-				# return {k:v for k,v in self._data.iteritems() if k in key}
-				return dict([(k,v) for k,v in self._data.iteritems() if k in key])
+				# return {k:v for k,v in self._data.items() if k in key}
+				return dict([(k,v) for k,v in self._data.items() if k in key])
 		# return single value of data:
 		return self._data.get(key, default)
 

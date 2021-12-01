@@ -181,7 +181,7 @@ class FilterPyinotify(FileFilter):
 		self.__pendingChkTime = time.time()
 		self.__pendingMinTime = minTime
 		# process now because we've missed it in monitoring:
-		for path, isDir in found.iteritems():
+		for path, isDir in found.items():
 			self._delPending(path)
 			# refresh monitoring of this:
 			if isDir is not None:

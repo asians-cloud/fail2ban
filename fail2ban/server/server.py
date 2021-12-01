@@ -209,7 +209,7 @@ class Server:
 
 		# Restore default signal handlers:
 		if _thread_name() == '_MainThread':
-			for s, sh in self.__prev_signals.iteritems():
+			for s, sh in self.__prev_signals.items():
 				signal.signal(s, sh)
 
 		# Give observer a small chance to complete its work before exit
@@ -328,7 +328,7 @@ class Server:
 					if "--restart" in opts:
 						self.stopAllJail()
 				# first set all affected jail(s) to idle and reset filter regex and other lists/dicts:
-				for jn, jail in self.__jails.iteritems():
+				for jn, jail in self.__jails.items():
 					if name == '--all' or jn == name:
 						jail.idle = True
 						self.__reload_state[jn] = jail
@@ -339,7 +339,7 @@ class Server:
 			# end reload, all affected (or new) jails have already all new parameters (via stream) and (re)started:
 			with self.__lock:
 				deljails = []
-				for jn, jail in self.__jails.iteritems():
+				for jn, jail in self.__jails.items():
 					# still in reload state:
 					if jn in self.__reload_state:
 						# remove jails that are not reloaded (untouched, so not in new configuration)
@@ -816,7 +816,7 @@ class Server:
 		return DNSUtils.setIPv6IsAllowed(value)
 
 	def setThreadOptions(self, value):
-		for o, v in value.iteritems():
+		for o, v in value.items():
 			if o == 'stacksize':
 				threading.stack_size(int(v)*1024)
 			else: # pragma: no cover

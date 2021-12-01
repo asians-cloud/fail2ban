@@ -333,7 +333,7 @@ class BanManager:
 			# Gets the list of ticket to remove (thereby correct next unban time).
 			unBanList = {}
 			nextUnbanTime = BanTicket.MAX_TIME
-			for fid,ticket in self.__banList.iteritems():
+			for fid,ticket in self.__banList.items():
 				# current time greater as end of ban - timed out:
 				eob = ticket.getEndOfBanTime(self.__banTime)
 				if time > eob:
@@ -353,7 +353,7 @@ class BanManager:
 						del self.__banList[fid]
 				else:
 					# create new dictionary without items to be deleted:
-					self.__banList = dict((fid,ticket) for fid,ticket in self.__banList.iteritems() \
+					self.__banList = dict((fid,ticket) for fid,ticket in self.__banList.items() \
 						if fid not in unBanList)
 						
 			# return list of tickets:

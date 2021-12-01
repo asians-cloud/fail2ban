@@ -67,7 +67,7 @@ if sys.version_info >= (3,): # pragma: 2.x no cover
 else: # pragma: 3.x no cover
 	def _normalize(x):
 		if isinstance(x, dict):
-			return dict((_normalize(k), _normalize(v)) for k, v in x.iteritems())
+			return dict((_normalize(k), _normalize(v)) for k, v in x.items())
 		elif isinstance(x, (list, set)):
 			return [_normalize(element) for element in x]
 		elif isinstance(x, unicode):

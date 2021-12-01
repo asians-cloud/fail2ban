@@ -805,7 +805,7 @@ class Filter(JailThread):
 			if (nfflgs & 4) == 0 and not mlfidGroups.get('mlfpending', 0):
 				mlfidGroups.pop("matches", None)
 			# overwrite multi-line failure with all values, available in fail:
-			mlfidGroups.update(((k,v) for k,v in fail.iteritems() if v is not None))
+			mlfidGroups.update(((k,v) for k,v in fail.items() if v is not None))
 			# new merged failure data:
 			fail = mlfidGroups
 			# if forget (disconnect/reset) - remove cached entry:

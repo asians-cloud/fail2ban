@@ -587,7 +587,7 @@ def assertSortedEqual(self, a, b, level=1, nestedOnly=False, key=repr, msg=None)
 				return
 			raise ValueError('%r != %r' % (a, b))
 		if isinstance(a, dict) and isinstance(b, dict): # compare dict's:
-			for k, v1 in a.iteritems():
+			for k, v1 in a.items():
 				v2 = b[k]
 				if isinstance(v1, (dict, list, tuple)) and isinstance(v2, (dict, list, tuple)):
 					_assertSortedEqual(v1, v2, level-1 if level != 0 else 0, nestedOnly, key)
