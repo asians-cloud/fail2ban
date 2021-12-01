@@ -79,7 +79,7 @@ timeRE['ExY'] = r"(?P<Y>%s\d)" % _getYearCentRE(cent=(0,3), distance=3)
 timeRE['Exy'] = r"(?P<y>%s\d)" % _getYearCentRE(cent=(2,3), distance=3)
 
 def getTimePatternRE():
-	keys = timeRE.keys()
+	keys = list(timeRE.keys())
 	patt = (r"%%(%%|%s|[%s])" % (
 		"|".join([k for k in keys if len(k) > 1]),
 		"".join([k for k in keys if len(k) == 1]),
@@ -134,7 +134,7 @@ def zone2offset(tz, dt):
 	"""
 	if isinstance(tz, int):
 		return tz
-	if isinstance(tz, basestring):
+	if isinstance(tz, str):
 		return validateTimeZone(tz)
 	tz, tzo = tz
 	if tzo is None or tzo == '': # without offset
@@ -171,7 +171,7 @@ def reGroupDictStrptime(found_dict, msec=False, default_tz=None):
 	year = month = day = hour = minute = tzoffset = \
 	weekday = julian = week_of_year = None
 	second = fraction = 0
-	for key, val in found_dict.iteritems():
+	for key, val in found_dict.items():
 		if val is None: continue
 		# Directives not explicitly handled below:
 		#   c, x, X

@@ -76,15 +76,15 @@ class install_scripts_f2b(install_scripts):
 		if dry_run:
 			#bindir = self.install_dir
 			bindir = self.build_dir
-			print('creating fail2ban-python binding -> %s (dry-run, real path can be different)' % (bindir,))
-			print('Copying content of %s to %s' % (self.build_dir, self.install_dir));
+			print(('creating fail2ban-python binding -> %s (dry-run, real path can be different)' % (bindir,)))
+			print(('Copying content of %s to %s' % (self.build_dir, self.install_dir)));
 			return outputs
 		fn = None
 		for fn in outputs:
 			if os.path.basename(fn) == 'fail2ban-server':
 				break
 		bindir = os.path.dirname(fn)
-		print('creating fail2ban-python binding -> %s' % (bindir,))
+		print(('creating fail2ban-python binding -> %s' % (bindir,)))
 		updatePyExec(bindir)
 		return outputs
 
@@ -98,7 +98,7 @@ class install_scripts_f2b(install_scripts):
 				install_dir = install_dir[len(root):]
 		except: # pragma: no cover
 			print('WARNING: Cannot find root-base option, check the bin-path to fail2ban-scripts in "fail2ban.service".')
-		print('Creating %s/fail2ban.service (from fail2ban.service.in): @BINDIR@ -> %s' % (buildroot, install_dir))
+		print(('Creating %s/fail2ban.service (from fail2ban.service.in): @BINDIR@ -> %s' % (buildroot, install_dir)))
 		with open(os.path.join(source_dir, 'files/fail2ban.service.in'), 'r') as fn:
 			lines = fn.readlines()
 		fn = None
@@ -315,7 +315,7 @@ if obsoleteFiles:
 	print("Please delete them:")
 	print("")
 	for f in obsoleteFiles:
-		print("\t" + f)
+		print(("\t" + f))
 	print("")
 
 if isdir("/usr/lib/fail2ban"):

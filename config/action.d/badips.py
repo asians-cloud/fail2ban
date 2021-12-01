@@ -28,8 +28,9 @@ if sys.version_info >= (3, ): # pragma: 2.x no cover
 	from urllib.parse import urlencode
 	from urllib.error import HTTPError
 else: # pragma: 3.x no cover
-	from urllib2 import Request, urlopen, HTTPError
-	from urllib import urlencode
+	from urllib.request import Request, urlopen
+	from urllib.error import HTTPError
+	from urllib.parse import urlencode
 
 from fail2ban.server.actions import Actions, ActionBase, BanTicket
 from fail2ban.helpers import splitwords, str2LogLevel

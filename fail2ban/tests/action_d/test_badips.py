@@ -32,7 +32,7 @@ from ..utils import LogCaptureTestCase, CONFIG_DIR
 if sys.version_info >= (3, ): # pragma: 2.x no cover
 	from urllib.error import HTTPError, URLError
 else: # pragma: 3.x no cover
-	from urllib2 import HTTPError, URLError
+	from urllib.error import HTTPError, URLError
 
 def skip_if_not_available(f):
 	"""Helper to decorate tests to skip in case of timeout/http-errors like "502 bad gateway".

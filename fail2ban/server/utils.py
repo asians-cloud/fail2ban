@@ -57,7 +57,7 @@ _RETCODE_HINTS = {
 
 # Dictionary to lookup signal name from number
 signame = dict((num, name)
-	for name, num in signal.__dict__.iteritems() if name.startswith("SIG"))
+	for name, num in signal.__dict__.items() if name.startswith("SIG"))
 
 class Utils():
 	"""Utilities provide diverse static methods like executes OS shell commands, etc.
@@ -109,7 +109,7 @@ class Utils():
 								break
 					else: # pragma: 3.x no cover (dict is in 2.6 only)
 						remlst = []
-						for (ck, cv) in cache.iteritems():
+						for (ck, cv) in cache.items():
 							# if expired:
 							if cv[1] <= t:
 								remlst.append(ck)
@@ -156,7 +156,7 @@ class Utils():
 		if not isinstance(realCmd, list):
 			realCmd = [realCmd]
 		i = len(realCmd)-1
-		for k, v in varsDict.iteritems():
+		for k, v in varsDict.items():
 			varsStat += "%s=$%s " % (k, i)
 			realCmd.append(v)
 			i += 1

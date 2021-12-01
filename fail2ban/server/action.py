@@ -111,9 +111,9 @@ class CallingMap(MutableMapping, object):
 	def _asdict(self, calculated=False, checker=None):
 		d = dict(self.data, **self.storage)
 		if not calculated:
-			return dict((n,v) for n,v in d.iteritems() \
+			return dict((n,v) for n,v in d.items() \
 				if not callable(v) or n in self.CM_REPR_ITEMS)
-		for n,v in d.items():
+		for n,v in list(d.items()):
 			if callable(v):
 				try:
 					# calculate:
@@ -179,7 +179,7 @@ class CallingMap(MutableMapping, object):
 		return self.__class__(_merge_copy_dicts(self.data, self.storage))
 
 
-class ActionBase(object):
+class ActionBase(object, metaclass=ABCMeta):
 	"""An abstract base class for actions in Fail2Ban.
 
 	Action Base is a base definition of what methods need to be in
@@ -209,7 +209,6 @@ class ActionBase(object):
 	Any additional arguments specified in `jail.conf` or passed
 	via `fail2ban-client` will be passed as keyword arguments.
 	"""
-	__metaclass__ = ABCMeta
 
 	@classmethod
 	def __subclasshook__(cls, C):
@@ -420,7 +419,7 @@ class CommandAction(ActionBase):
 			if not callable(family): # pragma: no cover
 				return self.__substCache.get(key, {}).get(family)
 			# family as expression - use it to filter values:
-			return [v for f, v in self.__substCache.get(key, {}).iteritems() if family(f)]
+			return [v for f, v in self.__substCache.get(key, {}).items() if family(f)]
 		cmd = args[0]
 		if cmd: # set:
 			try:
@@ -432,7 +431,7 @@ class CommandAction(ActionBase):
 			try:
 				famd = self.__substCache[key]
 				cmd = famd.pop(family)
-				for family, v in famd.items():
+				for family, v in list(famd.items()):
 					if v == cmd:
 						del famd[family]
 			except KeyError: # pragma: no cover
@@ -448,7 +447,7 @@ class CommandAction(ActionBase):
 		res = True
 		err = 'Script error'
 		if not family: # all started:
-			family = [famoper for (famoper,v) in self.__started.iteritems() if v]
+			family = [famoper for (famoper,v) in self.__started.items() if v]
 		for famoper in family:
 			try:
 				cmd = self._getOperation(tag, famoper)
@@ -628,7 +627,7 @@ class CommandAction(ActionBase):
 		and executes the resulting command.
 		"""
 		# collect started families, may be started on demand (conditional):
-		family = [f for (f,v) in self.__started.iteritems() if v & 3 == 3]; # started and contains items
+		family = [f for (f,v) in self.__started.items() if v & 3 == 3]; # started and contains items
 		# if nothing contains items:
 		if not family: return True
 		# flush:
@@ -653,7 +652,7 @@ class CommandAction(ActionBase):
 		"""
 		# collect started families, if started on demand (conditional):
 		if family is None:
-			family = [f for (f,v) in self.__started.iteritems() if v]
+			family = [f for (f,v) in self.__started.items() if v]
 			# if no started (on demand) actions:
 			if not family: return True
 			self.__started = {}
@@ -687,7 +686,7 @@ class CommandAction(ActionBase):
 		ret = True
 		# for each started family:
 		if self.actioncheck:
-			for (family, started) in self.__started.items():
+			for (family, started) in list(self.__started.items()):
 				if started and not self._invariantCheck(family, beforeRepair):
 					# reset started flag and command of executed operation:
 					self.__started[family] = 0
