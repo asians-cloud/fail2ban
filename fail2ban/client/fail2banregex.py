@@ -43,7 +43,12 @@ import time
 import urllib
 from optparse import OptionParser, Option
 
-from ConfigParser import NoOptionError, NoSectionError, MissingSectionHeaderError
+import six
+
+if six.PY2:
+    from ConfigParser import NoOptionError, NoSectionError, MissingSectionHeaderError
+else:
+    from configparser import NoOptionError, NoSectionError, MissingSectionHeaderError
 
 try: # pragma: no cover
 	from ..server.filtersystemd import FilterSystemd
