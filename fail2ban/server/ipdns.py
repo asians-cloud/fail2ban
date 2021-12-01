@@ -309,7 +309,7 @@ class IPAddr(object):
 
 				# mask out host portion if prefix length is supplied
 				if cidr is not None and cidr >= 0:
-					mask = ~(0xFFFFFFFFL >> cidr)
+					mask = ~(0xFFFFFFFF >> cidr)
 					self._addr &= mask
 					self._plen = cidr
 
@@ -321,13 +321,13 @@ class IPAddr(object):
 
 				# mask out host portion if prefix length is supplied
 				if cidr is not None and cidr >= 0:
-					mask = ~(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFL >> cidr)
+					mask = ~(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF >> cidr)
 					self._addr &= mask
 					self._plen = cidr
 
 				# if IPv6 address is a IPv4-compatible, make instance a IPv4
 				elif self.isInNet(IPAddr.IP6_4COMPAT):
-					self._addr = lo & 0xFFFFFFFFL
+					self._addr = lo & 0xFFFFFFFF
 					self._family = socket.AF_INET
 					self._plen = 32
 		else:
@@ -451,7 +451,7 @@ class IPAddr(object):
 		elif self.isIPv6:
 			# convert network to host byte order
 			hi = self._addr >> 64
-			lo = self._addr & 0xFFFFFFFFFFFFFFFFL
+			lo = self._addr & 0xFFFFFFFFFFFFFFFF
 			binary = struct.pack("!QQ", hi, lo)
 			if self._plen and self._plen < 128:
 				add = "/%d" % self._plen
@@ -509,9 +509,9 @@ class IPAddr(object):
 		if self.family != net.family:
 			return False
 		if self.isIPv4:
-			mask = ~(0xFFFFFFFFL >> net.plen)
+			mask = ~(0xFFFFFFFF >> net.plen)
 		elif self.isIPv6:
-			mask = ~(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFL >> net.plen)
+			mask = ~(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF >> net.plen)
 		else:
 			return False
 		

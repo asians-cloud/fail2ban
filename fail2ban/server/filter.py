@@ -955,7 +955,7 @@ class Filter(JailThread):
 		"""Status of failures detected by filter.
 		"""
 		ret = [("Currently failed", self.failManager.size()),
-		       ("Total failed", self.failManager.getFailTotal())]
+				("Total failed", self.failManager.getFailTotal())]
 		return ret
 
 

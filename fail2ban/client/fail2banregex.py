@@ -46,9 +46,9 @@ from optparse import OptionParser, Option
 import six
 
 if six.PY2:
-    from ConfigParser import NoOptionError, NoSectionError, MissingSectionHeaderError
+	from ConfigParser import NoOptionError, NoSectionError, MissingSectionHeaderError
 else:
-    from configparser import NoOptionError, NoSectionError, MissingSectionHeaderError
+	from configparser import NoOptionError, NoSectionError, MissingSectionHeaderError
 
 try: # pragma: no cover
 	from ..server.filtersystemd import FilterSystemd
