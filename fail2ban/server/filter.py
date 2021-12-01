@@ -107,6 +107,8 @@ class Filter(JailThread):
 		self._errors = 0
 		## Next time to update log or journal position in database:
 		self._nextUpdateTM = 0
+		## Seek to file end next time. When log is increasing fast, it is better to seek to the send and read the latest logs
+		self._nextSeekToEnd = False
 		## Pending updates (must be executed at next update time or during stop):
 		self._pendDBUpdates = {}
 		## return raw host (host is not dns):
@@ -460,6 +462,7 @@ class Filter(JailThread):
 	def performSvc(self, force=False):
 		"""Performs a service tasks (clean failure list)."""
 		tm = MyTime.time()
+
 		# avoid too early clean up:
 		if force or tm >= self.__nextSvcTime:
 			self.__nextSvcTime = tm + 5
@@ -681,6 +684,7 @@ class Filter(JailThread):
 					# simulate now as date:
 					date = MyTime.time()
 					self.__lastDate = date
+					self._nextSeekToEnd = True
 			else:
 				# in initialization (restore) phase, if too old - ignore:
 				if date < MyTime.time() - self.getFindTime():
@@ -692,6 +696,7 @@ class Filter(JailThread):
 						("Please check a jail for a timing issue. Line with odd timestamp: %s",
 						 line))
 					# ignore - too old (obsolete) entry:
+					self._nextSeekToEnd = True
 					return []
 
 		# save last line (lazy convert of process line tuple to string on demand):
@@ -1148,6 +1153,10 @@ class FileFilter(Filter):
 					# acquire in operation from log and process:
 					self.inOperation = inOperation if inOperation is not None else log.inOperation
 					self.processLineAndAdd(line.rstrip('\r\n'))
+
+					if self._nextSeekToEnd:
+						log.seek(0, 2)
+						self._nextSeekToEnd = False
 		finally:
 			log.close()
 		if self.jail.database is not None:
