@@ -129,7 +129,7 @@ class FailManager:
 	def cleanup(self, time):
 		time -= self.__maxTime
 		with self.__lock:
-			todelete = [fid for fid,item in self.__failList.iteritems() \
+			todelete = [fid for fid,item in self.__failList.items() \
 				if item.getTime() <= time]
 			if len(todelete) == len(self.__failList):
 				# remove all:
@@ -143,7 +143,7 @@ class FailManager:
 					del self.__failList[fid]
 			else:
 				# create new dictionary without items to be deleted:
-				self.__failList = dict((fid,item) for fid,item in self.__failList.iteritems() \
+				self.__failList = dict((fid,item) for fid,item in self.__failList.items() \
 					if item.getTime() > time)
 		self.__bgSvc.service()
 	
