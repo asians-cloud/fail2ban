@@ -1538,12 +1538,17 @@ class FileContainer:
 
 	def __iter__(self):
 		return self
-	def next(self):
+		
+	def __next__(self):
 		line = self.readline()
 		if line is None:
 			self.close()
 			raise StopIteration
 		return line
+
+	def next(self):
+		return self.__next__()
+
 
 _decode_line_warn = Utils.Cache(maxCount=1000, maxTime=24*60*60);
 
